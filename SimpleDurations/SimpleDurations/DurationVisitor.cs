@@ -129,20 +129,6 @@ namespace SimpleDurations
             this.Valid = !this.digits.Any();
         }
 
-        //private void HandleToken(char expected, char token, ref double target)
-        //{
-        //    if (token == expected)
-        //    {
-        //        if (this.inTimeSegment || !this.digits.Any())
-        //        {
-        //            return; // invalid
-        //        }
-
-        //        this.Weeks = double.Parse(CharListToString(this.digits));
-        //        this.digits.Clear();
-        //    }
-        //}
-
         private static string CharListToString(IList<char> chars)
             => string.Join(string.Empty, chars);
     }

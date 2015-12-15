@@ -23,6 +23,7 @@ namespace SimpleDurations.Tests
             yield return new object[] { "P60D", new SerializableTimeSpan(TimeSpan.FromDays(60)) };
             yield return new object[] { "P1DT1H", new SerializableTimeSpan(TimeSpan.FromDays(1).Add(TimeSpan.FromHours(1))) };
             yield return new object[] { "P1DT1M", new SerializableTimeSpan(TimeSpan.FromDays(1).Add(TimeSpan.FromMinutes(1))) };
+            yield return new object[] { "PT1.5H", new SerializableTimeSpan(TimeSpan.FromHours(1.5)) };
         }
 
         [Theory]
