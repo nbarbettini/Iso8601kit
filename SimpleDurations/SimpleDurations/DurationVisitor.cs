@@ -11,6 +11,9 @@ namespace SimpleDurations
     {
         private readonly char[] tokens;
 
+        List<char> digits = new List<char>();
+        bool inTimeSegment = false;
+
         private DurationVisitor(string duration)
         {
             this.tokens = duration.ToArray();
@@ -26,33 +29,121 @@ namespace SimpleDurations
 
         public bool Valid { get; private set; } = false;
 
+        public double Weeks { get; private set; } = 0;
+
+        public double Days { get; private set; } = 0;
+
+        public double Hours { get; private set; } = 0;
+
+        public double Minutes { get; private set; } = 0;
+
+        public double Seconds { get; private set; } = 0;
+
         private void Visit()
         {
-            if (this.tokens.Length < 2)
-                //|| this.tokens[0] != 'P')
+            if (this.tokens.Length < 2
+                || this.tokens[0] != 'P')
             {
                 return;
             }
 
-            Stack<char> digits = null;
-
-            bool inTimeSegment = false;
-
-            foreach (char token in this.tokens)
+            foreach (char token in this.tokens.Skip(1))
             {
-                if (!char.IsDigit(token))
+                if (token == 'Y')
                 {
-                    digits = new Stack<char>();
+                    return;
+                }
+
+                if (char.IsDigit(token) || char.IsPunctuation(token))
+                {
+                    this.digits.Add(token);
+                    continue;
                 }
 
                 if (token == 'T')
                 {
-                    inTimeSegment = true;
+                    this.inTimeSegment = true;
+                    continue;
+                }
+
+                if (token == 'W')
+                {
+                    if (this.inTimeSegment || !this.digits.Any())
+                    {
+                        return; // invalid
+                    }
+
+                    this.Weeks = double.Parse(CharListToString(this.digits));
+                    this.digits.Clear();
+                }
+
+                if (token == 'D')
+                {
+                    if (this.inTimeSegment || !this.digits.Any())
+                    {
+                        return; // invalid
+                    }
+
+                    this.Days = double.Parse(CharListToString(this.digits));
+                    this.digits.Clear();
+                    continue;
+                }
+
+                if (token == 'H')
+                {
+                    if (!this.inTimeSegment || !this.digits.Any())
+                    {
+                        return; // invalid
+                    }
+
+                    this.Hours = double.Parse(CharListToString(this.digits));
+                    this.digits.Clear();
+                    continue;
+                }
+
+                if (token == 'M')
+                {
+                    if (!this.inTimeSegment || !this.digits.Any())
+                    {
+                        return; // invalid
+                    }
+
+                    this.Minutes = double.Parse(CharListToString(this.digits));
+                    this.digits.Clear();
+                    continue;
+                }
+
+                if (token == 'S')
+                {
+                    if (!this.inTimeSegment || !this.digits.Any())
+                    {
+                        return; // invalid
+                    }
+
+                    this.Seconds = double.Parse(CharListToString(this.digits));
+                    this.digits.Clear();
                     continue;
                 }
             }
 
-            this.Valid = true;
+            this.Valid = !this.digits.Any();
         }
+
+        //private void HandleToken(char expected, char token, ref double target)
+        //{
+        //    if (token == expected)
+        //    {
+        //        if (this.inTimeSegment || !this.digits.Any())
+        //        {
+        //            return; // invalid
+        //        }
+
+        //        this.Weeks = double.Parse(CharListToString(this.digits));
+        //        this.digits.Clear();
+        //    }
+        //}
+
+        private static string CharListToString(IList<char> chars)
+            => string.Join(string.Empty, chars);
     }
 }

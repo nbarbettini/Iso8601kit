@@ -13,8 +13,22 @@ namespace SimpleDurations
             timeSpan = default(TimeSpan);
 
             var result = DurationVisitor.Parse(duration);
+            if (result.Valid)
+            {
+                timeSpan = ConvertResult(result);
+            }
 
             return result.Valid;
+        }
+
+        private static TimeSpan ConvertResult(DurationVisitor visitor)
+        {
+            return TimeSpan.Zero
+                .Add(TimeSpan.FromDays(visitor.Weeks * 7))
+                .Add(TimeSpan.FromDays(visitor.Days))
+                .Add(TimeSpan.FromHours(visitor.Hours))
+                .Add(TimeSpan.FromMinutes(visitor.Minutes))
+                .Add(TimeSpan.FromSeconds(visitor.Seconds));
         }
     }
 }

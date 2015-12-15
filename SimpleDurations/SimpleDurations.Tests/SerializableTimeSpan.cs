@@ -7,37 +7,38 @@ namespace SimpleDurations.Tests
     using System;
     using Xunit.Abstractions;
 
-    //public class SerializableTimeSpan : IXunitSerializable
-    //{
-    //    private TimeSpan? timeSpan;
+    [Serializable]
+    public class SerializableTimeSpan : IXunitSerializable
+    {
+        private TimeSpan? timeSpan;
 
-    //    public SerializableTimeSpan()
-    //    {
-    //    }
+        public SerializableTimeSpan()
+        {
+        }
 
-    //    public SerializableTimeSpan(TimeSpan timeSpan)
-    //    {
-    //        this.timeSpan = timeSpan;
-    //    }
+        public SerializableTimeSpan(TimeSpan timeSpan)
+        {
+            this.timeSpan = timeSpan;
+        }
 
-    //    public static implicit operator TimeSpan(SerializableTimeSpan obj)
-    //        => obj.timeSpan.Value;
+        public static implicit operator TimeSpan(SerializableTimeSpan obj)
+            => obj.timeSpan.Value;
 
-    //    public void Deserialize(IXunitSerializationInfo info)
-    //    {
-    //        this.timeSpan = info.GetValue<TimeSpan>("ts");
-    //    }
+        public void Deserialize(IXunitSerializationInfo info)
+        {
+            this.timeSpan = TimeSpan.FromTicks(info.GetValue<long>("ticks"));
+        }
 
-    //    public void Serialize(IXunitSerializationInfo info)
-    //    {
-    //        info.AddValue("ts", this.timeSpan.Value, typeof(TimeSpan));
-    //    }
+        public void Serialize(IXunitSerializationInfo info)
+        {
+            info.AddValue("ticks", this.timeSpan.Value.Ticks);
+        }
 
-    //    public override string ToString()
-    //    {
-    //        return this.timeSpan == null
-    //            ? "null"
-    //            : this.timeSpan.Value.ToString();
-    //    }
-    //}
+        public override string ToString()
+        {
+            return this.timeSpan == null
+                ? "null"
+                : this.timeSpan.Value.ToString();
+        }
+    }
 }
