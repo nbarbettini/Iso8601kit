@@ -7,126 +7,110 @@ namespace SimpleDurations
     using System.Collections.Generic;
     using System.Linq;
 
-    internal sealed class DurationVisitor
+    internal sealed partial class DurationVisitor
     {
         private readonly char[] tokens;
 
-        List<char> digits = new List<char>();
-        bool inTimeSegment = false;
+        private List<char> segmentDigits = new List<char>();
+        private bool inTimeSection = false;
+        private bool isValid = true;
+        private double weeks = 0;
+        private double days = 0;
+        private double hours = 0;
+        private double minutes = 0;
+        private double seconds = 0;
 
         private DurationVisitor(string duration)
         {
             this.tokens = duration.ToArray();
         }
 
-        public static DurationVisitor Parse(string duration)
-        {
-            var visitor = new DurationVisitor(duration);
-            visitor.Visit();
-
-            return visitor;
-        }
-
-        public bool Valid { get; private set; } = false;
-
-        public double Weeks { get; private set; } = 0;
-
-        public double Days { get; private set; } = 0;
-
-        public double Hours { get; private set; } = 0;
-
-        public double Minutes { get; private set; } = 0;
-
-        public double Seconds { get; private set; } = 0;
-
         private void Visit()
         {
-            if (this.tokens.Length < 2
-                || this.tokens[0] != 'P')
+            if (this.tokens.Length < 2 || this.tokens[0] != 'P')
             {
+                this.isValid = false;
                 return;
             }
 
             foreach (char token in this.tokens.Skip(1))
             {
-                if (token == 'Y')
+                if (!this.isValid)
                 {
                     return;
                 }
 
-                if (char.IsDigit(token) || char.IsPunctuation(token))
+                if (token == 'Y')
                 {
-                    this.digits.Add(token);
+                    this.isValid = false;
                     continue;
                 }
 
                 if (token == 'T')
                 {
-                    this.inTimeSegment = true;
+                    this.inTimeSection = true;
                     continue;
                 }
 
                 if (token == 'W')
                 {
-                    if (this.inTimeSegment || !this.digits.Any())
-                    {
-                        return; // invalid
-                    }
-
-                    this.Weeks = double.Parse(CharListToString(this.digits));
-                    this.digits.Clear();
+                    this.isValid = this.HandleDateToken(ref this.weeks);
+                    continue;
                 }
 
                 if (token == 'D')
                 {
-                    if (this.inTimeSegment || !this.digits.Any())
-                    {
-                        return; // invalid
-                    }
-
-                    this.Days = double.Parse(CharListToString(this.digits));
-                    this.digits.Clear();
+                    this.isValid = this.HandleDateToken(ref this.days);
                     continue;
                 }
 
                 if (token == 'H')
                 {
-                    if (!this.inTimeSegment || !this.digits.Any())
-                    {
-                        return; // invalid
-                    }
-
-                    this.Hours = double.Parse(CharListToString(this.digits));
-                    this.digits.Clear();
+                    this.isValid = this.HandleTimeToken(ref this.hours);
                     continue;
                 }
 
                 if (token == 'M')
                 {
-                    if (!this.inTimeSegment || !this.digits.Any())
-                    {
-                        return; // invalid
-                    }
-
-                    this.Minutes = double.Parse(CharListToString(this.digits));
-                    this.digits.Clear();
+                    this.isValid = this.HandleTimeToken(ref this.minutes);
                     continue;
                 }
 
                 if (token == 'S')
                 {
-                    if (!this.inTimeSegment || !this.digits.Any())
-                    {
-                        return; // invalid
-                    }
-
-                    this.Seconds = double.Parse(CharListToString(this.digits));
-                    this.digits.Clear();
+                    this.isValid = this.HandleTimeToken(ref this.seconds);
                     continue;
                 }
+
+                this.segmentDigits.Add(token);
             }
 
-            this.Valid = !this.digits.Any();
+            this.isValid &= !this.segmentDigits.Any();
+        }
+
+        private bool HandleDateToken(ref double target)
+            => this.HandleToken(false, ref target);
+
+        private bool HandleTimeToken(ref double target)
+            => this.HandleToken(true, ref target);
+
+        private bool HandleToken(bool timeToken, ref double target)
+        {
+            if (this.inTimeSection != timeToken || !this.segmentDigits.Any())
+            {
+                return false;
+            }
+
+            double result;
+            if (!double.TryParse(CharListToString(this.segmentDigits), out result))
+            {
+                return false;
+            }
+
+            target = result;
+            this.segmentDigits.Clear();
+
+            return true;
         }
 
         private static string CharListToString(IList<char> chars)

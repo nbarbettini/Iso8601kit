@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DurationVisitor.Api.cs" />
     <Compile Include="Iso8601Duration.cs" />
     <Compile Include="DurationVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

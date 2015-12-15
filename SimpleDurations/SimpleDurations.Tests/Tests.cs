@@ -13,6 +13,7 @@ namespace SimpleDurations.Tests
     {
         public static IEnumerable<object[]> GetValidTestCases()
         {
+            yield return new object[] { string.Empty, new SerializableTimeSpan(TimeSpan.Zero) };
             yield return new object[] { "PT300S", new SerializableTimeSpan(TimeSpan.FromSeconds(300)) };
             yield return new object[] { "PT60M", new SerializableTimeSpan(TimeSpan.FromMinutes(60)) };
             yield return new object[] { "PT24H", new SerializableTimeSpan(TimeSpan.FromHours(24)) };
@@ -48,12 +49,15 @@ namespace SimpleDurations.Tests
         }
 
         [Theory]
-        [InlineData("")]
+        [InlineData("foobar")]
+        [InlineData("PfoobarT")]
         [InlineData("3W")]
         [InlineData("P3")]
         [InlineData("P3W2")]
         [InlineData("PW")]
         [InlineData("P3WTM")]
+        [InlineData("P3fooD")]
+        [InlineData("PT1xM")]
         public void TryParse_invalid_duration(string invalid)
         {
             TimeSpan dummy;
