@@ -5,11 +5,11 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("SimpleDurations.Tests")]
+[assembly: AssemblyTitle("SimpleDuration.Tests")]
 [assembly: AssemblyDescription("Simple ISO 8601 durations library.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Nate Barbettini")]
-[assembly: AssemblyProduct("SimpleDurations")]
+[assembly: AssemblyProduct("SimpleDuration")]
 [assembly: AssemblyCopyright("Copyright © Nate Barbettini 2015. License: MIT")]
 
 [assembly: ComVisible(false)]

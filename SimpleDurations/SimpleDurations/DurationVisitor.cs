@@ -2,7 +2,7 @@
 // Copyright (c) 2015. Licensed under MIT.
 // </copyright>
 
-namespace SimpleDurations
+namespace SimpleDuration
 {
     using System.Collections.Generic;
     using System.Linq;
