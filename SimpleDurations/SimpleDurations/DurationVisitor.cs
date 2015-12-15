@@ -27,6 +27,12 @@ namespace SimpleDuration
 
         private void Visit()
         {
+            if (this.tokens.Length == 0)
+            {
+                this.isValid = true;
+                return;
+            }
+
             if (this.tokens.Length < 2 || this.tokens[0] != 'P')
             {
                 this.isValid = false;

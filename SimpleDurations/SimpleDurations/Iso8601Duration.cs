@@ -26,7 +26,8 @@ namespace SimpleDuration
         /// for that, a more powerful library such as NodaTime would be appropriate.
         /// </para>
         /// </remarks>
-        /// <param name="duration">The ISO 8601 duration, excluding year (Y) and month (M) designators.</param>
+        /// <param name="duration">The ISO 8601 duration, excluding year (Y) and month (M) designators.
+        /// </param>
         /// <param name="timeSpan">
         /// When the method returns, this parameter is set to the resulting <see cref="TimeSpan"/>
         /// if the conversion was successful, or <c>default(TimeSpan)</c> if the conversion was unsuccessful.</param>
@@ -42,6 +43,34 @@ namespace SimpleDuration
             }
 
             return result.Valid;
+        }
+
+        /// <summary>
+        /// Converts the ISO 8601 string representation of a duration to its equivalent
+        /// .NET <see cref="TimeSpan"/> representation.
+        /// </summary>
+        /// <remarks>
+        /// The year (Y) and month (M) designators are currently unsupported. If these
+        /// designators are encountered, the method will return <see langword="false"/>.
+        /// <para>
+        /// These are problematic because of things like leap years, Daylight Savings Time, etc.
+        /// More information is needed in order to convert to a <see cref="TimeSpan"/>;
+        /// for that, a more powerful library such as NodaTime would be appropriate.
+        /// </para>
+        /// </remarks>
+        /// <param name="duration">The ISO 8601 duration, excluding year (Y) and month (M) designators.</param>
+        /// <returns><see langword="true"/> if the conversion succeeded; <see langword="false"/> otherwise.</returns>
+        /// <exception cref="FormatException">The ISO 8601 string was not in the proper format.</exception>
+        public static TimeSpan Parse(string duration)
+        {
+            TimeSpan result;
+
+            if (!TryParse(duration, out result))
+            {
+                throw new FormatException("ISO 8601 string was not in the proper format.");
+            }
+
+            return result;
         }
 
         /// <summary>
