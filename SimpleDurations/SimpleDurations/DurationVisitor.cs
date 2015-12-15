@@ -6,7 +6,7 @@ namespace SimpleDuration
 {
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Text;
     internal sealed partial class DurationVisitor
     {
         private readonly char[] tokens;
@@ -120,6 +120,6 @@ namespace SimpleDuration
         }
 
         private static string CharListToString(IList<char> chars)
-            => string.Join(string.Empty, chars);
+            => chars.Aggregate(new StringBuilder(), (builder, c) => builder.Append(c), builder => builder.ToString());
     }
 }
