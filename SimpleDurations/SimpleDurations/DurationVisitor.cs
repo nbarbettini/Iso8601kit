@@ -11,7 +11,7 @@ namespace SimpleDurations
     {
         private readonly char[] tokens;
 
-        private List<char> segmentDigits = new List<char>();
+        private List<char> currentDigits = new List<char>();
         private bool inTimeSection = false;
         private bool isValid = true;
         private double weeks = 0;
@@ -54,61 +54,61 @@ namespace SimpleDurations
 
                 if (token == 'W')
                 {
-                    this.isValid = this.HandleDateToken(ref this.weeks);
+                    this.isValid = this.HandleDateDesignator(ref this.weeks);
                     continue;
                 }
 
                 if (token == 'D')
                 {
-                    this.isValid = this.HandleDateToken(ref this.days);
+                    this.isValid = this.HandleDateDesignator(ref this.days);
                     continue;
                 }
 
                 if (token == 'H')
                 {
-                    this.isValid = this.HandleTimeToken(ref this.hours);
+                    this.isValid = this.HandleTimeDesignator(ref this.hours);
                     continue;
                 }
 
                 if (token == 'M')
                 {
-                    this.isValid = this.HandleTimeToken(ref this.minutes);
+                    this.isValid = this.HandleTimeDesignator(ref this.minutes);
                     continue;
                 }
 
                 if (token == 'S')
                 {
-                    this.isValid = this.HandleTimeToken(ref this.seconds);
+                    this.isValid = this.HandleTimeDesignator(ref this.seconds);
                     continue;
                 }
 
-                this.segmentDigits.Add(token);
+                this.currentDigits.Add(token);
             }
 
-            this.isValid &= !this.segmentDigits.Any();
+            this.isValid &= !this.currentDigits.Any();
         }
 
-        private bool HandleDateToken(ref double target)
-            => this.HandleToken(false, ref target);
+        private bool HandleDateDesignator(ref double target)
+            => this.HandleDesignator(false, ref target);
 
-        private bool HandleTimeToken(ref double target)
-            => this.HandleToken(true, ref target);
+        private bool HandleTimeDesignator(ref double target)
+            => this.HandleDesignator(true, ref target);
 
-        private bool HandleToken(bool timeToken, ref double target)
+        private bool HandleDesignator(bool timeToken, ref double target)
         {
-            if (this.inTimeSection != timeToken || !this.segmentDigits.Any())
+            if (this.inTimeSection != timeToken || !this.currentDigits.Any())
             {
                 return false;
             }
 
             double result;
-            if (!double.TryParse(CharListToString(this.segmentDigits), out result))
+            if (!double.TryParse(CharListToString(this.currentDigits), out result))
             {
                 return false;
             }
 
             target = result;
-            this.segmentDigits.Clear();
+            this.currentDigits.Clear();
 
             return true;
         }

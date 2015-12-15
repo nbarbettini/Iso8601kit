@@ -1,4 +1,4 @@
-﻿// <copyright file="Tests.cs" company="Nate Barbettini">
+﻿// <copyright file="TryParse_tests.cs" company="Nate Barbettini">
 // Copyright (c) 2015. Licensed under MIT.
 // </copyright>
 
@@ -9,8 +9,15 @@ namespace SimpleDurations.Tests
     using Shouldly;
     using Xunit;
 
-    public class Tests
+    /// <summary>
+    /// Unit tests for the <see cref="Iso8601Duration.TryParse(string, out TimeSpan)"/> method.
+    /// </summary>
+    public class TryParse_tests
     {
+        /// <summary>
+        /// Gets test cases for valid ISO 8601 strings.
+        /// </summary>
+        /// <returns>Enumerable test cases for an xUnit <see cref="TheoryAttribute">Theory</see>.</returns>
         public static IEnumerable<object[]> GetValidTestCases()
         {
             yield return new object[] { string.Empty, new SerializableTimeSpan(TimeSpan.Zero) };
@@ -27,27 +34,46 @@ namespace SimpleDurations.Tests
             yield return new object[] { "PT1.5H", new SerializableTimeSpan(TimeSpan.FromHours(1.5)) };
         }
 
+        /// <summary>
+        /// Tests for valid ISO 8601 duration strings.
+        /// </summary>
+        /// <param name="iso8601">The ISO 8601 duration string.</param>
+        /// <param name="expected">The expected <see cref="TimeSpan"/>.</param>
         [Theory]
         [MemberData(nameof(GetValidTestCases))]
-        public void TryParse_valid_duration(string duration, SerializableTimeSpan expected)
+        public void Valid_duration(string iso8601, SerializableTimeSpan expected)
         {
             TimeSpan result;
 
-            Iso8601Duration.TryParse(duration, out result);
+            Iso8601Duration.TryParse(iso8601, out result);
 
             result.ShouldBe(expected);
         }
 
+        /// <summary>
+        /// Regression tests for unsupported ISO 8601 designators.
+        /// </summary>
+        /// <remarks>
+        /// The year (Y) and month (M) designators are currently unsupported.
+        /// These are problematic because of things like leap years, DST, etc.
+        /// More information is needed in order to convert to a <see cref="TimeSpan"/>;
+        /// for that, a more powerful library such as NodaTime would be appropriate.
+        /// </remarks>
+        /// <param name="unsupported">An ISO 8601 duration string containing unsupported designators.</param>
         [Theory]
         [InlineData("P1Y")]
         [InlineData("P1M")]
         [InlineData("P1MT1M")]
-        public void TryParse_unsupported_duration(string unsupported)
+        public void Unsupported_duration(string unsupported)
         {
             TimeSpan dummy;
             Iso8601Duration.TryParse(unsupported, out dummy).ShouldBe(false);
         }
 
+        /// <summary>
+        /// Tests for invalid ISO 8601 duration strings.
+        /// </summary>
+        /// <param name="invalid">An ISO 8601 duration containing invalid syntax.</param>
         [Theory]
         [InlineData("foobar")]
         [InlineData("PfoobarT")]
@@ -58,7 +84,7 @@ namespace SimpleDurations.Tests
         [InlineData("P3WTM")]
         [InlineData("P3fooD")]
         [InlineData("PT1xM")]
-        public void TryParse_invalid_duration(string invalid)
+        public void Invalid_duration(string invalid)
         {
             TimeSpan dummy;
             Iso8601Duration.TryParse(invalid, out dummy).ShouldBe(false);
