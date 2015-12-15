@@ -1,0 +1,7 @@
+language: csharp
+solution: "./SimpleDurations/SimpleDurations.sln"
+install:
+- travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./SimpleDurations/SimpleDurations.sln
+script:
+- xbuild ./SimpleDurations/SimpleDurations.sln
+- mono ./SimpleDurations/packages/xunit.runner.console*/tools/xunit.console.exe ./SimpleDurations/SimpleDurations.Tests/bin/Debug/SimpleDurations.Tests.dll
