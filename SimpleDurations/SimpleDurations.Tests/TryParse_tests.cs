@@ -15,23 +15,18 @@ namespace SimpleDurations.Tests
     public class TryParse_tests
     {
         /// <summary>
-        /// Gets test cases for valid ISO 8601 strings.
+        /// Additional valid test cases not included in <see cref="TestCases.ValidDurations"/>.
         /// </summary>
-        /// <returns>Enumerable test cases for an xUnit <see cref="TheoryAttribute">Theory</see>.</returns>
-        public static IEnumerable<object[]> GetValidTestCases()
+        /// <returns>Enumerable test cases for an xUnit <see cref="Xunit.TheoryAttribute">Theory</see>.</returns>
+        public static IEnumerable<object[]> AdditionalValidDurations()
         {
-            yield return new object[] { string.Empty, new SerializableTimeSpan(TimeSpan.Zero) };
             yield return new object[] { "PT300S", new SerializableTimeSpan(TimeSpan.FromSeconds(300)) };
             yield return new object[] { "PT60M", new SerializableTimeSpan(TimeSpan.FromMinutes(60)) };
-            yield return new object[] { "PT24H", new SerializableTimeSpan(TimeSpan.FromHours(24)) };
-            yield return new object[] { "P7D", new SerializableTimeSpan(TimeSpan.FromDays(7)) };
-            yield return new object[] { "P4W", new SerializableTimeSpan(TimeSpan.FromDays(28)) };
-            yield return new object[] { "P4WT", new SerializableTimeSpan(TimeSpan.FromDays(28)) };
-            yield return new object[] { "PT1H", new SerializableTimeSpan(TimeSpan.FromHours(1)) };
             yield return new object[] { "P60D", new SerializableTimeSpan(TimeSpan.FromDays(60)) };
-            yield return new object[] { "P1DT1H", new SerializableTimeSpan(TimeSpan.FromDays(1).Add(TimeSpan.FromHours(1))) };
-            yield return new object[] { "P1DT1M", new SerializableTimeSpan(TimeSpan.FromDays(1).Add(TimeSpan.FromMinutes(1))) };
+            yield return new object[] { "P61D", new SerializableTimeSpan(TimeSpan.FromDays(61)) };
+            yield return new object[] { "P4WT", new SerializableTimeSpan(TimeSpan.FromDays(28)) };
             yield return new object[] { "PT1.5H", new SerializableTimeSpan(TimeSpan.FromHours(1.5)) };
+            yield return new object[] { "P180D", new SerializableTimeSpan(TimeSpan.FromDays(180)) };
         }
 
         /// <summary>
@@ -40,7 +35,8 @@ namespace SimpleDurations.Tests
         /// <param name="iso8601">The ISO 8601 duration string.</param>
         /// <param name="expected">The expected <see cref="TimeSpan"/>.</param>
         [Theory]
-        [MemberData(nameof(GetValidTestCases))]
+        [MemberData(nameof(TestCases.ValidDurations), MemberType = typeof(TestCases))]
+        [MemberData(nameof(AdditionalValidDurations))]
         public void Valid_duration(string iso8601, SerializableTimeSpan expected)
         {
             TimeSpan result;
@@ -53,12 +49,6 @@ namespace SimpleDurations.Tests
         /// <summary>
         /// Regression tests for unsupported ISO 8601 designators.
         /// </summary>
-        /// <remarks>
-        /// The year (Y) and month (M) designators are currently unsupported.
-        /// These are problematic because of things like leap years, DST, etc.
-        /// More information is needed in order to convert to a <see cref="TimeSpan"/>;
-        /// for that, a more powerful library such as NodaTime would be appropriate.
-        /// </remarks>
         /// <param name="unsupported">An ISO 8601 duration string containing unsupported designators.</param>
         [Theory]
         [InlineData("P1Y")]
