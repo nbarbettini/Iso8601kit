@@ -89,6 +89,11 @@ namespace SimpleDuration
         /// <returns>An ISO 8601 string representing the duration in <paramref name="timeSpan"/>.</returns>
         public static string Format(TimeSpan timeSpan)
         {
+            if (timeSpan == TimeSpan.Zero)
+            {
+                return "PT0S";
+            }
+
             var builder = new StringBuilder("P");
 
             if (timeSpan.TotalDays > 7)

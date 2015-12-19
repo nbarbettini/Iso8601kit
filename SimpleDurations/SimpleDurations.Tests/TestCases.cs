@@ -18,7 +18,7 @@ namespace SimpleDuration.Tests
         /// <returns>Enumerable test cases for an xUnit <see cref="Xunit.TheoryAttribute">Theory</see>.</returns>
         public static IEnumerable<object[]> ValidDurations()
         {
-            yield return new object[] { string.Empty, new SerializableTimeSpan(TimeSpan.Zero) };
+            yield return new object[] { "PT0S", new SerializableTimeSpan(TimeSpan.Zero) };
             yield return new object[] { "P4W", new SerializableTimeSpan(TimeSpan.FromDays(28)) };
             yield return new object[] { "P7D", new SerializableTimeSpan(TimeSpan.FromDays(7)) };
             yield return new object[] { "PT23H", new SerializableTimeSpan(TimeSpan.FromHours(23)) };
