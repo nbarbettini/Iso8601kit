@@ -1,8 +1,4 @@
-﻿// <copyright file="Iso8601Duration.cs" company="Nate Barbettini">
-// Copyright (c) 2015. Licensed under MIT.
-// </copyright>
-
-namespace SimpleDuration
+﻿namespace Iso8601kit
 {
     using System;
     using System.Text;

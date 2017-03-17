@@ -1,8 +1,4 @@
-﻿// <copyright file="DurationVisitor.Api.cs" company="Nate Barbettini">
-// Copyright (c) 2015. Licensed under MIT.
-// </copyright>
-
-namespace SimpleDuration
+﻿namespace Iso8601kit
 {
     internal sealed partial class DurationVisitor
     {

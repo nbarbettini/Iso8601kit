@@ -1,8 +1,5 @@
-﻿// <copyright file="DurationVisitor.cs" company="Nate Barbettini">
-// Copyright (c) 2015. Licensed under MIT.
-// </copyright>
-
-namespace SimpleDuration
+﻿
+namespace Iso8601kit
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -22,7 +19,7 @@ namespace SimpleDuration
 
         private DurationVisitor(string duration)
         {
-            this.tokens = duration.ToArray();
+            this.tokens = duration.ToCharArray();
         }
 
         private void Visit()
