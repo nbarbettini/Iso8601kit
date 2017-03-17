@@ -1,18 +1,18 @@
-﻿// <copyright file="Parse_tests.cs" company="Nate Barbettini">
+﻿// <copyright file="TryParse_tests.cs" company="Nate Barbettini">
 // Copyright (c) 2015. Licensed under MIT.
 // </copyright>
 
-namespace SimpleDuration.Tests
-{
-    using System;
-    using System.Collections.Generic;
-    using Shouldly;
-    using Xunit;
+using System;
+using System.Collections.Generic;
+using Shouldly;
+using Xunit;
 
+namespace Iso8601kit.Tests
+{
     /// <summary>
-    /// Unit tests for the <see cref="Iso8601Duration.Parse(string)"/> method.
+    /// Unit tests for the <see cref="Iso8601Duration.TryParse(string, out TimeSpan)"/> method.
     /// </summary>
-    public class Parse_tests
+    public class TryParse_tests
     {
         /// <summary>
         /// Additional valid test cases not included in <see cref="TestCases.ValidDurations"/>.
@@ -39,7 +39,11 @@ namespace SimpleDuration.Tests
         [MemberData(nameof(AdditionalValidDurations))]
         public void Valid_duration(string iso8601, SerializableTimeSpan expected)
         {
-            Iso8601Duration.Parse(iso8601).ShouldBe(expected);
+            TimeSpan result;
+
+            Iso8601Duration.TryParse(iso8601, out result).ShouldBe(true);
+
+            result.ShouldBe(expected);
         }
 
         /// <summary>
@@ -52,7 +56,8 @@ namespace SimpleDuration.Tests
         [InlineData("P1MT1M")]
         public void Unsupported_duration(string unsupported)
         {
-            Should.Throw<FormatException>(() => Iso8601Duration.Parse(unsupported));
+            TimeSpan dummy;
+            Iso8601Duration.TryParse(unsupported, out dummy).ShouldBe(false);
         }
 
         /// <summary>
@@ -71,7 +76,8 @@ namespace SimpleDuration.Tests
         [InlineData("PT1xM")]
         public void Invalid_duration(string invalid)
         {
-            Should.Throw<FormatException>(() => Iso8601Duration.Parse(invalid));
+            TimeSpan dummy;
+            Iso8601Duration.TryParse(invalid, out dummy).ShouldBe(false);
         }
     }
 }

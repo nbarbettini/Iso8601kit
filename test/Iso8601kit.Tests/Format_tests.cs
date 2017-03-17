@@ -2,7 +2,7 @@
 // Copyright (c) 2015. Licensed under MIT.
 // </copyright>
 
-namespace SimpleDuration.Tests
+namespace Iso8601kit.Tests
 {
     using Shouldly;
     using Xunit;

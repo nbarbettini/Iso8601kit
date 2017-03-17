@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iso8601kit", "src\Iso8601ki
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{CA756E55-A145-40E0-B52D-CD1E5C7E957A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iso8601kit.Tests", "test\Iso8601kit.Tests\Iso8601kit.Tests.csproj", "{CDCFE826-7A01-4C2F-9067-B94AC6A28FEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,11 +21,16 @@ Global
 		{2E9E9212-81B9-4439-BF79-4B5E98566ABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E9E9212-81B9-4439-BF79-4B5E98566ABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E9E9212-81B9-4439-BF79-4B5E98566ABA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDCFE826-7A01-4C2F-9067-B94AC6A28FEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDCFE826-7A01-4C2F-9067-B94AC6A28FEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDCFE826-7A01-4C2F-9067-B94AC6A28FEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDCFE826-7A01-4C2F-9067-B94AC6A28FEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2E9E9212-81B9-4439-BF79-4B5E98566ABA} = {2B8D81AA-1FF4-47CF-B574-A6B7B7A7DD5E}
+		{CDCFE826-7A01-4C2F-9067-B94AC6A28FEE} = {CA756E55-A145-40E0-B52D-CD1E5C7E957A}
 	EndGlobalSection
 EndGlobal
